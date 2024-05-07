@@ -89,6 +89,25 @@ export class OrbitControls extends EventDispatcher{
 			}
 		};
 
+		const handlekeys = (e) =>{
+			switch (e.key) {
+				case 'a':
+				  this.yawDelta += this.rotationSpeed/50; // Aumenta la rotación en sentido antihorario
+				  break;
+				case 'd':
+				  this.yawDelta -= this.rotationSpeed/50; // Aumenta la rotación en sentido horario
+				  break;
+				case 'w':
+				  this.pitchDelta -= this.rotationSpeed/50; // Aumenta la inclinación hacia arriba
+				  break;
+				case 's':
+				  this.pitchDelta += this.rotationSpeed/50; // Aumenta la inclinación hacia abajo
+				  break;
+				default:
+				  // No hacer nada para otras teclas
+				  break;
+			}}
+
 		let previousTouch = null;
 		let touchStart = e => {
 			previousTouch = e;
@@ -148,6 +167,7 @@ export class OrbitControls extends EventDispatcher{
 		this.addEventListener('drop', drop);
 		this.addEventListener('mousewheel', scroll);
 		this.addEventListener('dblclick', dblclick);
+		document.addEventListener('keypress', handlekeys)
 	}
 
 	setScene (scene) {

@@ -54,6 +54,7 @@ export class Sidebar{
 		this.initFilters();
 		this.initClippingTool();
 		this.initSettings();
+		this.initHotKeys(); //activa los atajos de teclado
 		
 		$('#potree_version_number').html(Potree.version.major + "." + Potree.version.minor + Potree.version.suffix);
 	}
@@ -1515,6 +1516,8 @@ export class Sidebar{
 		});
 
 		lblMoveSpeed.html(this.viewer.getMoveSpeed().toFixed(1));
+
+	
 	}
 
 
@@ -1561,4 +1564,32 @@ export class Sidebar{
 		});
 	}
 
+	initHotKeys(){
+		let viewer = this.viewer
+		console.log('a')
+		document.addEventListener('keypress', (e)=>{
+			switch (e.key) {
+				case 'e':
+				 	viewer.setControls(viewer.earthControls); //Fija camara a terrestre
+				  	break;
+				case 'o':
+					viewer.setControls(viewer.orbitControls); //Fija camara a orbital
+				  	break;
+				case 'z': //Herramienta de medida
+					$('#menu_measurements').next().slideDown();
+					let measurement = this.measuringTool.startInsertion({
+						showDistances: true,
+						showArea: false,
+						closed: false,
+						name: 'Distance'});
+					let measurementsRoot = $("#jstree_scene").jstree().get_json("measurements");
+					let jsonNode = measurementsRoot.children.find(child => child.data.uuid === measurement.uuid);
+					$.jstree.reference(jsonNode.id).deselect_all();
+					$.jstree.reference(jsonNode.id).select_node(jsonNode.id);
+					break;
+				default:
+				  	break
+				  	
+		}})
+	}
 }
